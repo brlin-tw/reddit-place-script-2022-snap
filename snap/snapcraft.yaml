@@ -35,6 +35,7 @@ parts:
       - requirements.txt
     build-packages:
       - dos2unix
+      - rsync
     #stage-packages:
       #- python3.9-venv
     override-pull: |
@@ -51,17 +52,16 @@ parts:
         --directory \
         --verbose \
         "${SNAPCRAFT_PART_INSTALL}/bin"
-      install \
-        --mode 0644 \
-        --verbose \
-        "${SNAPCRAFT_PART_SRC}/"*.py \
+      rsync \
+        -av \
+        --exclude .git/ \
+        --exclude .github/ \
+        --exclude Dockerfile \
+        --exclude 'start*' \
+        "${SNAPCRAFT_PART_SRC}/" \
         "${SNAPCRAFT_PART_INSTALL}/bin/"
-      chmod \
-        --verbose \
-        0755 \
-        "${SNAPCRAFT_PART_INSTALL}/bin/main.py"
-      dos2unix \
-        "${SNAPCRAFT_PART_INSTALL}/bin/"*.py
+      #dos2unix \
+        #"${SNAPCRAFT_PART_INSTALL}/bin/"*.py
 
   scriptlets:
     source: snap/local/scriptlets
@@ -95,4 +95,3 @@ apps:
 
   python:
     command: bin/python3 --version
-
