@@ -1,10 +1,24 @@
 name: reddit-place-script-2022
+title: Reddit Place Script 2022
 base: core20
 adopt-info: main
 summary: Script to draw an image onto r/place
 description: |
   This is a script to draw a JPG onto r/place (https://www.reddit.com/r/place/).
 
+  Refer the upstream project for instructions: https://github.com/rdeepak2002/reddit-place-script-2022
+
+  This is NOT an official distribution of Reddit Place Script 2022, refer the snap's own issue tracker for support:
+
+      Issues · brlin-tw/reddit-place-script-2022-snap
+      https://github.com/brlin-tw/reddit-place-script-2022-snap/issues
+
+  This snap is only for demonstration purposes, the snap packager do NOT hold liability to all the damage may have cause during the use of the snap, refer:
+
+      User Agreement - Reddit
+      https://www.redditinc.com/policies
+
+  for more info in Reddit's ToS.
 grade: stable
 confinement: strict
 
