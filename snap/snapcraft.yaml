@@ -67,8 +67,6 @@ parts:
         --exclude 'start*' \
         "${SNAPCRAFT_PART_SRC}/" \
         "${SNAPCRAFT_PART_INSTALL}/bin/"
-      #dos2unix \
-        #"${SNAPCRAFT_PART_INSTALL}/bin/"*.py
 
   scriptlets:
     source: snap/local/scriptlets
