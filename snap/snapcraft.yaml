@@ -5,11 +5,80 @@ summary: Script to draw an image onto r/place
 description: |
   This is a script to draw a JPG onto r/place (https://www.reddit.com/r/place/).
 
-grade: devel
+grade: stable
 confinement: strict
 
 parts:
   main:
+    after:
+      # for override-pull script
+      - scriptlets
+
     source: https://github.com/rdeepak2002/reddit-place-script-2022.git
+    source-depth: 1
     plugin: python
-    
+    requirements:
+      - requirements.txt
+    build-packages:
+      - dos2unix
+    #stage-packages:
+      #- python3.9-venv
+    override-pull: |
+      set -o nounset
+
+      snapcraftctl pull
+
+      "${SNAPCRAFT_STAGE}"/scriptlets/main-adopt-info
+
+    override-build: |
+      set -o nounset
+      snapcraftctl build
+      install \
+        --directory \
+        --verbose \
+        "${SNAPCRAFT_PART_INSTALL}/bin"
+      install \
+        --mode 0644 \
+        --verbose \
+        "${SNAPCRAFT_PART_SRC}/"*.py \
+        "${SNAPCRAFT_PART_INSTALL}/bin/"
+      chmod \
+        --verbose \
+        0755 \
+        "${SNAPCRAFT_PART_INSTALL}/bin/main.py"
+      dos2unix \
+        "${SNAPCRAFT_PART_INSTALL}/bin/"*.py
+
+  scriptlets:
+    source: snap/local/scriptlets
+    plugin: dump
+    organize:
+      '*': scriptlets/
+    prime:
+      - -*
+
+  # Launcher programs to fix problems at runtime
+  launchers:
+    source: snap/local/launchers
+    plugin: dump
+    organize:
+      '*': bin/
+    stage:
+      - -bin/README.*
+
+apps:
+  reddit-place-script-2022:
+    adapter: full
+    command: bin/main.py
+    command-chain:
+      - bin/reddit-place-script-2022-launch
+    environment:
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+    plugs:
+      - network
+      - home
+
+  python:
+    command: bin/python3 --version
+
